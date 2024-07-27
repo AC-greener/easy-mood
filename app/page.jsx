@@ -1,9 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Howl } from "howler";
-import { Coffee, CloudRain, Waves, Wind, TreePine } from 'lucide-react';
-import SoundCard from './SoundCard'
-
+import {
+  Coffee,
+  CloudRain,
+  Waves,
+  Wind,
+  TreePine,
+  Bird,
+  Ear,
+} from "lucide-react";
+import SoundCard from "./SoundCard";
+import { Icon } from "lucide-react";
+import { wavesBirds, wavesSharkFin } from "@lucide/lab";
 const sounds = {
   coffeeShop: {
     src: "/coffee-shop.mp3",
@@ -25,10 +34,46 @@ const sounds = {
     icon: Wind,
     label: "风",
   },
-  birds: {
+  forest: {
     src: "/forest.mp3",
     icon: TreePine,
     label: "森林",
+  },
+  birds: {
+    src: "/birdsong-after-rainfall.m4a",
+    icon: Bird,
+    label: "鸟鸣",
+    title: "birdsong-forest",
+  },
+  birds2: {
+    src: "/birds2.wav",
+    icon: Bird,
+    label: "雨后鸟鸣",
+    title: "birdsong-after-rainfall",
+  },
+  neighborhood: {
+    src: "/living-minute-noisy-neighborhood-at-night.flac",
+    icon: Ear,
+    label: "夜晚的邻居",
+    title: "living-minute-noisy-neighborhood-at-night",
+  },
+  lakewaves: {
+    src: "/lakewaves-n-crowcall.wav",
+    icon: <Icon iconNode={wavesBirds} />,
+    label: "海浪与乌鸦",
+    title: "lakewaves-n-crowcall",
+  },
+  "evening-urbanscape": {
+    src: "/evening-urbanscape-with-birdcalls-in-bengaluru.wav",
+    icon: Bird,
+    label: "班加罗尔的鸟鸣",
+    title: "evening-urbanscape-with-birdcalls-in-bengaluru",
+  },
+  "waves-children": {
+    src: "/waves-children-laughing-gulls-in-madeira.wav",
+    icon: <Icon iconNode={wavesSharkFin} />,
+    label: "海浪、孩子与海鸥",
+    title: "waves-children-laughing-gulls-in-madeira",
   },
 };
 
@@ -73,9 +118,9 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen  bg-accent  p-8 pl-64 pr-64">
+    <main className="min-h-screen  bg-[#008c8c]  p-8 pl-64 pr-64">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8">Easy Mood</h1>
+        <h1 className="text-3xl font-bold text-center mb-8 text-[#ffffff]">Easy Mood</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {Object.entries(sounds).map(([soundKey, { icon, label }]) => (
             <SoundCard

@@ -22,14 +22,10 @@ Easy Moods 是一个简单而强大的环境音效网站，旨在帮助用户通
 
 要在本地运行这个项目，请按照以下步骤操作：
 
-1. 确保你的开发环境满足以下要求：
-   Node.js (推荐版本 18.x 或更高)
+1. 确保你的开发环境满足以下要求：Node.js (推荐版本 18.x 或更高)
 2. 克隆仓库
    git clone https://github.com/AC-greener/easy-mood.git
-   cd easy-mood
-3. 安装依赖
-   npm install
-4. 启动服务
-   npm run dev
-5. 访问应用
-   打开你的浏览器，访问 http://localhost:3000。你应该能看到 Easy Moods 的主页。
+3. cd easy-mood
+4. 安装依赖：npm install
+5. 启动服务：npm run dev
+6. 打开浏览器，访问 http://localhost:3000。你应该能看到 Easy Moods 的主页。

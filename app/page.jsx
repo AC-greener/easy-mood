@@ -9,6 +9,7 @@ import {
   TreePine,
   Bird,
   Ear,
+  Github,
 } from "lucide-react";
 import SoundCard from "./SoundCard";
 import { Icon } from "lucide-react";
@@ -83,16 +84,19 @@ export default function Home() {
     Object.keys(sounds).reduce((acc, key) => ({ ...acc, [key]: 0 }), {})
   );
 
-  const loadSound = useCallback((key) => {
-    if (!players[key]) {
-      const newPlayer = new Howl({
-        src: [sounds[key].src],
-        loop: true,
-        volume: volumes[key] / 100,
-      });
-      setPlayers((prevPlayers) => ({ ...prevPlayers, [key]: newPlayer }));
-    }
-  }, [players, volumes]);
+  const loadSound = useCallback(
+    (key) => {
+      if (!players[key]) {
+        const newPlayer = new Howl({
+          src: [sounds[key].src],
+          loop: true,
+          volume: volumes[key] / 100,
+        });
+        setPlayers((prevPlayers) => ({ ...prevPlayers, [key]: newPlayer }));
+      }
+    },
+    [players, volumes]
+  );
 
   useEffect(() => {
     return () => {
@@ -100,31 +104,49 @@ export default function Home() {
     };
   }, [players]);
 
-  const handleVolumeChange = useCallback((soundKey, volume) => {
-    setVolumes((prevVolumes) => ({
-      ...prevVolumes,
-      [soundKey]: volume,
-    }));
+  const handleVolumeChange = useCallback(
+    (soundKey, volume) => {
+      setVolumes((prevVolumes) => ({
+        ...prevVolumes,
+        [soundKey]: volume,
+      }));
 
-    loadSound(soundKey);
+      loadSound(soundKey);
 
-    const sound = players[soundKey];
-    if (sound) {
-      sound.volume(volume / 100);
-      if (!sound.playing() && volume > 0) {
-        sound.play();
-      } else if (sound.playing() && volume === 0) {
-        sound.pause();
+      const sound = players[soundKey];
+      if (sound) {
+        sound.volume(volume / 100);
+        if (!sound.playing() && volume > 0) {
+          sound.play();
+        } else if (sound.playing() && volume === 0) {
+          sound.pause();
+        }
       }
-    }
-  }, [players, loadSound]);
+    },
+    [players, loadSound]
+  );
 
   return (
     // <main className="min-h-screen  bg-[#008c8c]  p-8 pl-64 pr-64">
-    <main className="min-h-screen  p-8 pl-64 pr-64 hero-pattern" style={{backgroundImage: "url('/img/color4bg.png')"}}>
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8 text-[#ffffff]">Easy Mood</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <main
+      className="min-h-screen p-8 hero-pattern relative"
+      style={{ backgroundImage: "url('/img/color4bg.png')" }}
+    >
+      <div className="flex justify-between items-center mb-12">
+        <h1 className="text-5xl font-bold text-[#f0f0f0]">
+          Easy Mood
+        </h1>
+        <a
+          href="https://github.com/AC-greener/easy-mood"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#f0f0f0] hover:text-gray-300 transition-colors"
+        >
+          <Github size={28} />
+        </a>
+      </div>
+      <div className="max-w-7xl mx-auto px-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {Object.entries(sounds).map(([soundKey, { icon, label }]) => (
             <SoundCard
               key={soundKey}

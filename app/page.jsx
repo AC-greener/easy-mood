@@ -84,19 +84,18 @@ export default function Home() {
     Object.keys(sounds).reduce((acc, key) => ({ ...acc, [key]: 0 }), {})
   );
 
-  const loadSound = useCallback(
-    (key) => {
-      if (!players[key]) {
-        const newPlayer = new Howl({
-          src: [sounds[key].src],
-          loop: true,
-          volume: volumes[key] / 100,
-        });
-        setPlayers((prevPlayers) => ({ ...prevPlayers, [key]: newPlayer }));
-      }
-    },
-    [players, volumes]
-  );
+  const loadSound = useCallback((key) => {
+    if (!players[key]) {
+      const newPlayer = new Howl({
+        src: [sounds[key].src],
+        loop: true,
+        volume: volumes[key] / 100,
+      });
+      setPlayers((prevPlayers) => ({ ...prevPlayers, [key]: newPlayer }));
+      return newPlayer;
+    }
+    return players[key];
+  }, [players, volumes]);
 
   useEffect(() => {
     return () => {
@@ -104,30 +103,29 @@ export default function Home() {
     };
   }, [players]);
 
-  const handleVolumeChange = useCallback(
-    (soundKey, volume) => {
-      setVolumes((prevVolumes) => ({
-        ...prevVolumes,
-        [soundKey]: volume,
-      }));
+  const handleVolumeChange = useCallback((soundKey, volume) => {
+    setVolumes((prevVolumes) => ({
+      ...prevVolumes,
+      [soundKey]: volume,
+    }));
 
-      loadSound(soundKey);
+    const sound = loadSound(soundKey);
+    sound.volume(volume / 100);
+    
+    if (volume > 0 && !sound.playing()) {
+      sound.play();
+    } else if (volume === 0 && sound.playing()) {
+      sound.pause();
+    }
+  }, [loadSound]);
 
-      const sound = players[soundKey];
-      if (sound) {
-        sound.volume(volume / 100);
-        if (!sound.playing() && volume > 0) {
-          sound.play();
-        } else if (sound.playing() && volume === 0) {
-          sound.pause();
-        }
-      }
-    },
-    [players, loadSound]
-  );
+  const handleCardClick = useCallback((soundKey) => {
+    const currentVolume = volumes[soundKey];
+    const newVolume = currentVolume === 0 ? 50 : 0;
+    handleVolumeChange(soundKey, newVolume);
+  }, [volumes, handleVolumeChange]);
 
   return (
-    // <main className="min-h-screen  bg-[#008c8c]  p-8 pl-64 pr-64">
     <main
       className="min-h-screen p-8 hero-pattern relative"
       style={{ backgroundImage: "url('/img/color4bg.png')" }}
@@ -155,6 +153,7 @@ export default function Home() {
               label={label}
               volume={volumes[soundKey]}
               onVolumeChange={handleVolumeChange}
+              onClick={handleCardClick}
             />
           ))}
         </div>

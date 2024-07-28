@@ -14,6 +14,7 @@ import {
 import SoundCard from "./SoundCard";
 import { Icon } from "lucide-react";
 import { wavesBirds, wavesSharkFin } from "@lucide/lab";
+import { Analytics } from "@vercel/analytics/react"
 const sounds = {
   coffeeShop: {
     src: "/coffee-shop.mp3",
@@ -131,7 +132,7 @@ export default function Home() {
       style={{ backgroundImage: "url('/img/color4bg.png')" }}
     >
       <div className="flex justify-between items-center mb-12">
-        <h1 className="text-5xl font-bold text-[#f0f0f0]">
+        <h1 className="text-4xl font-bold text-[#f0f0f0]">
           Easy Mood
         </h1>
         <a
@@ -158,6 +159,7 @@ export default function Home() {
           ))}
         </div>
       </div>
+      <Analytics/>
     </main>
   );
 }

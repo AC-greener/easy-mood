@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Howl } from "howler";
 import {
   Coffee,
@@ -83,39 +83,41 @@ export default function Home() {
     Object.keys(sounds).reduce((acc, key) => ({ ...acc, [key]: 0 }), {})
   );
 
-  useEffect(() => {
-    const newPlayers = {};
-    for (const key in sounds) {
-      newPlayers[key] = new Howl({
+  const loadSound = useCallback((key) => {
+    if (!players[key]) {
+      const newPlayer = new Howl({
         src: [sounds[key].src],
         loop: true,
         volume: volumes[key] / 100,
       });
+      setPlayers((prevPlayers) => ({ ...prevPlayers, [key]: newPlayer }));
     }
+  }, [players, volumes]);
 
-    setPlayers(newPlayers);
-
+  useEffect(() => {
     return () => {
-      for (const key in newPlayers) {
-        newPlayers[key].stop();
-      }
+      Object.values(players).forEach((player) => player.stop());
     };
-  }, []);
+  }, [players]);
 
-  const handleVolumeChange = (soundKey, volume) => {
+  const handleVolumeChange = useCallback((soundKey, volume) => {
     setVolumes((prevVolumes) => ({
       ...prevVolumes,
       [soundKey]: volume,
     }));
 
+    loadSound(soundKey);
+
     const sound = players[soundKey];
     if (sound) {
       sound.volume(volume / 100);
-      if (!sound.playing()) {
+      if (!sound.playing() && volume > 0) {
         sound.play();
+      } else if (sound.playing() && volume === 0) {
+        sound.pause();
       }
     }
-  };
+  }, [players, loadSound]);
 
   return (
     // <main className="min-h-screen  bg-[#008c8c]  p-8 pl-64 pr-64">
